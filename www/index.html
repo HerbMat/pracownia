@@ -8,6 +8,8 @@
     <link href="lib/ionic/css/ionic.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
 	
+	<link href="css/calendar.css" rel="stylesheet">
+	
 	
 	
 	
@@ -37,6 +39,8 @@
 	<script type="text/javascript" src="lib/angular-ui-calendar/src/calendar.js"></script>
 	<script type="text/javascript" src="lib/fullcalendar/dist/fullcalendar.min.js"></script>
 	<script type="text/javascript" src="lib/fullcalendar/dist/gcal.js"></script>
+	<script type="text/javascript" src="lib/angular-route.js"></script>
+	<script type="text/javascript" src="lib/angular-ui-router/release/angular-ui-router.js"></script>
     <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js"></script>
 	
@@ -52,8 +56,11 @@
         <h1 class="title">Ionic Blank Starter</h1>
       </ion-header-bar>
       <ion-content>
-	  <div ui-calendar ng-model="eventSources"></div>
-	  <div ui-calendar="uiConfig.calendar" ng-model="eventSources">
+	  <a href="#calendar">Calendar</a>
+	  
+	  
+	  
+	  
       </ion-content>
     </ion-pane>
   </body>
