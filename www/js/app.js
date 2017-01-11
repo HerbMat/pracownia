@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 
 
-angular.module('starter', ['calendarOrganize','ionic','ngRoute','ui.router','ui.calendar','ui.bootstrap'])
+angular.module('starter', ['calendarOrganize','ionic','ngRoute','ui.router'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -57,7 +57,9 @@ angular.module('starter', ['calendarOrganize','ionic','ngRoute','ui.router','ui.
 
 })
 
-var calendOrganize=angular.module('calendarOrganize',[])
+
+
+
 
 
 

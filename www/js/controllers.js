@@ -1,5 +1,5 @@
 //angular.module('App', ['ui.calendar', 'ui.bootstrap'])
-
+var calendOrganize=angular.module('calendarOrganize',['ui.calendar', 'ui.bootstrap']);
 calendOrganize.controller('CalendarCtrl',
    function($scope, $compile, $timeout, uiCalendarConfig) {
     var date = new Date();
