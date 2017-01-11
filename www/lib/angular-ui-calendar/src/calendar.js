@@ -272,22 +272,22 @@ angular.module('ui.calendar', [])
                         if (calendar && calendar.fullCalendar) {
                             calendar.fullCalendar('destroy');
                         }
-                        if (attrs.calendar) {
-                            calendar = uiCalendarConfig.calendars[attrs.calendar] = angular.element(elm).html('');
-                        } else {
-                            calendar = angular.element(elm).html('');
-                        }
+						if (attrs.calendar) {
+							calendar = uiCalendarConfig.calendars[attrs.calendar] = $(elm).html('');
+						} else {
+							calendar = $(elm).html('');
+						}
                     };
 
-                    scope.initCalendar = function () {
-                        if (!calendar) {
-                            calendar = angular.element(elm).html('');
-                        }
-                        calendar.fullCalendar(options);
-                        if (attrs.calendar) {
-                            uiCalendarConfig.calendars[attrs.calendar] = calendar;
-                        }
-                    };
+				scope.initCalendar = function () {
+                    if (!calendar) {
+                        calendar = $(elm).html('');
+                    }
+                    calendar.fullCalendar(options);
+                    if (attrs.calendar) {
+                        uiCalendarConfig.calendars[attrs.calendar] = calendar;
+                    }
+             };
 
                     scope.$on('$destroy', function () {
                         scope.destroyCalendar();
