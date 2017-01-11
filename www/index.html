@@ -32,7 +32,8 @@
     <script src="js/platformOverrides.js"></script>
 
     <!-- ionic/angularjs js -->
-    <script src="lib/ionic/js/ionic.bundle.js"></script>
+    <script type="text/javascript" src="lib/ionic/js/ionic.bundle.js"></script>
+	<script type="text/javascript" src="lib/ui-bootstrap-tpls-0.13.0.js"></script>
 	<script type="text/javascript" src="lib/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="lib/moment/min/moment.min.js"></script>
 	<script type="text/javascript" src="lib/angular/angular.min.js"></script>
@@ -56,11 +57,12 @@
         <h1 class="title">Ionic Blank Starter</h1>
       </ion-header-bar>
       <ion-content>
-	  <a href="#calendar">Calendar</a>
+
+	    <a ui-sref="calendar" ui-sref-active="active">Calendar</a>
 	  
 	  
 	  
-	  
+	  <ui-view></ui-view>
       </ion-content>
     </ion-pane>
   </body>

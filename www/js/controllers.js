@@ -1,6 +1,6 @@
-angular.module('App', ['ui.calendar', 'ui.bootstrap'])
+//angular.module('App', ['ui.calendar', 'ui.bootstrap'])
 
-.controller('CalendarCtrl',
+calendOrganize.controller('CalendarCtrl',
    function($scope, $compile, $timeout, uiCalendarConfig) {
     var date = new Date();
     var d = date.getDate();
