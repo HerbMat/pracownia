@@ -1,7 +1,7 @@
 //angular.module('App', ['ui.calendar', 'ui.bootstrap'])
 var calendOrganize=angular.module('calendarOrganize',['ui.calendar', 'ui.bootstrap']);
 calendOrganize.controller('CalendarCtrl',
-   function($scope, $compile, $timeout, uiCalendarConfig) {
+   function($scope, $compile, $timeout, $uibModal,uiCalendarConfig) {
     var date = new Date();
     var d = date.getDate();
     var m = date.getMonth();
@@ -128,4 +128,34 @@ calendOrganize.controller('CalendarCtrl',
     /* event sources array*/
     $scope.eventSources = [$scope.events, $scope.eventSource, $scope.eventsF];
     $scope.eventSources2 = [$scope.calEventsExt, $scope.eventsF, $scope.events];
+    
+  $scope.uiConfig = {
+    calendar: {
+      dayClick: function(event) {console.log('Day clicking'+event);$scope.openModal(event)}
+    }
+  };
+  
+  
+ $scope.openModal = function (event) {
+            $uibModal.open({
+                templateUrl: 'templates/addEvent.html',
+                backdrop: false,
+                size: 'md',
+                controller: function ($scope, $uibModalInstance) {
+
+
+  var date = new Date(event);var d = date.getDate();var m = date.getMonth();var y = date.getFullYear();
+  $scope.ok = function () {
+    $uibModalInstance.close({type:'party',id: 999,title: 'Added from modal',start: new Date(y, m, d, 16, 0),allDay: false});
+  };
+
+
+                    $scope.cancel = function () {
+                        $uibModalInstance.dismiss('cancel');
+                    };
+                }
+            });
+        }
+  
+  
 });

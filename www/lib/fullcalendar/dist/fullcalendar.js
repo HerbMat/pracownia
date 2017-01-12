@@ -5531,7 +5531,7 @@ var DayTableMixin = FC.DayTableMixin = {
 		var classes = this.getDayClasses(date);
 
 		classes.unshift('fc-day', view.widgetContentClass);
-
+			
 		return '<td class="' + classes.join(' ') + '"' +
 			' data-date="' + date.format('YYYY-MM-DD') + '"' + // if date has a time, won't format it
 			(otherAttrs ?
