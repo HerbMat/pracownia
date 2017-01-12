@@ -1,80 +1,11 @@
-<div class="hero-unit">
-            <div class="container">
-                <h1>UI Calendar</h1>
-                <p>A complete AngularJS directive for the <a href="http://arshaw.com/fullcalendar/">Arshaw FullCalendar</a>.</p>
-                <p class="btn-group">
-                    <a href="https://github.com/angular-ui/ui-calendar" class='btn'><i class='icon-github'></i> Code on Github</a>
-                    <a href="https://github.com/angular-ui/ui-calendar/archive/master.zip" class='btn btn-primary'><i class="icon-download-alt icon-white"></i> Download <small>(0.8.1)</small></a>
-                </p>
-            </div>
-            <div class="bs-docs-social">
-                <div class="container">
-                    <ul class="bs-docs-social-buttons">
-                        <li>
-                            <iframe src="http://ghbtns.com/github-btn.html?user=angular-ui&amp;repo=ui-calendar&amp;type=watch&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
-                        </li>
-                        <li>
-                            <iframe src="http://ghbtns.com/github-btn.html?user=angular-ui&amp;repo=ui-calendar&amp;type=fork&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="95" height="20"></iframe>
-                        </li>
-                        <li>
-                            <div class="g-plusone" data-size="medium"></div>        
-                            <!-- Place this tag after the last +1 button tag. -->
-                            <script type="text/javascript">
-                                (function () {
-                                    var po = document.createElement('script');
-                                    po.type = 'text/javascript';
-                                    po.async = true;
-                                    po.src = 'https://apis.google.com/js/plusone.js';
-                                    var s = document.getElementsByTagName('script')[0];
-                                    s.parentNode.insertBefore(po, s);
-                                })();
-                            </script>
-                        </li>
-                    </ul> 
-                </div>
-            </div>
-        </div>
+
 <div role="main">
     <div class="container">
         <section id="directives-calendar" ng-controller="CalendarCtrl">
-            <div class="page-header">
-                <h1>UI-Calendar</h1>
-            </div>
+
             <div class="well">
                 <div class="row-fluid">
-                    <div class="span4">
-                        <h3>What?</h3>
 
-                        <p>Attach Angular objects to a calendar.</p>
-                        <p>Show the data binding between two different calendars using the same event sources.</p>
-
-                        <h3>Why?</h3>
-
-                        <p>Why Not?</p>
-                        
-                        <div class="btn-group calTools">
-                          <button class="btn" ng-click="changeLang()">
-                            {{changeTo}}
-                          </button>              
-                          <button class="btn" ng-click="addRemoveEventSource(eventSources,eventSource)">
-                            Toggle Source
-                          </button>
-                          <button type="button" class="btn btn-primary" ng-click="addEvent()">
-                            Add Event
-                          </button>
-                        </div>
-
-                        <ul class="unstyled">
-                            <li ng-repeat="e in events">
-                                <div class="alert alert-info">
-                                    <a class="close" ng-click="remove($index)"><i class="icon-remove"></i></a>
-                                    <b> <input ng-model="e.title"></b> 
-                                    {{e.start | date:"MMM dd"}} - {{e.end | date:"MMM dd"}}
-                                </div>
-                            </li>
-                        </ul>
-
-                    </div>
 
                     <div class="span8">
                         <tabset>
@@ -86,7 +17,10 @@
                                 <h4>{{alertMessage}}</h4>
                               </div>
                               <div class="btn-toolbar">
-                                <p class="pull-right lead">Calendar One View Options</p>
+                                  
+                                              <!-- Calendar modal -->
+                                  
+                                <p class="pull-right lead" ng-click="clickDate()">Calendar One View Options</p>
                                 <div class="btn-group">
                                     <button class="btn btn-success" ng-click="changeView('agendaDay', 'myCalendar1')">AgendaDay</button>
                                     <button class="btn btn-success" ng-click="changeView('agendaWeek', 'myCalendar1')">AgendaWeek</button>
@@ -133,10 +67,7 @@
                     </div>
                 </div>
             </div>
-            <h3>How?</h3>
-        <pre class="prettyprint linenums">
-		<div ui-calendar="{{uiConfig.calendar}}" calendar="myCalendar" class="span8 calendar" ng-model="eventSources"></div>
-		 </pre>
+
         </section>
     </div>
 </div>
@@ -153,3 +84,4 @@
                 s.parentNode.insertBefore(ga, s);
             })();
         </script>
+        
