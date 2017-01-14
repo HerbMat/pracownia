@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 
 
-angular.module('starter', ['calendarOrganize','ionic','ngRoute','ui.router'])
+angular.module('starter', ['calendarOrganize','ionic','ngRoute', 'dataservices','ui.router'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -30,7 +30,7 @@ angular.module('starter', ['calendarOrganize','ionic','ngRoute','ui.router'])
 
 
 
-.config(function ($stateProvider, $urlRouterProvider) {
+.config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
 
     // Ionic uses AngularUI Router which uses the concept of states
     // Learn more here: https://github.com/angular-ui/ui-router
@@ -50,8 +50,8 @@ angular.module('starter', ['calendarOrganize','ionic','ngRoute','ui.router'])
         url: '/login',
         templateUrl: 'templates/login.html',
         controller: 'LoginCtrl'
-    })
-    
+    });
+    $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
     // if none of the above states are matched, use this as the fallback
     
 

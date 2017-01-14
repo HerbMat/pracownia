@@ -1,10 +1,14 @@
         <div class="modal-header">
-            <h3>I'm a modal too!</h3>
+            <h3>Add new event!</h3>
         </div>
         <div class="modal-body">
-            <p>Click OK to add event</p>
+           
+            <input ng-model="addEvent.title"  />
+            <input type="datetime-local" ng-model="addEvent.startDate"  />
+            <input type="datetime-local" ng-model="addEvent.endDate"  />
+           <input  ng-model="addEvent.location"  />
         </div>
         <div class="modal-footer">
-            <button class="btn btn-primary" ng-click="ok()">OK</button>
+            <button class="btn btn-primary" ng-click="add()">Add</button>
             <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
         </div>
