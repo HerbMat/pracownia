@@ -1,12 +1,13 @@
-var calendOrganize = angular.module('calendarOrganize', ['ui.calendar', 'ui.bootstrap']);
-calendOrganize.controller('CalendarCtrl',
+var calendOrganize = angular.module('starter.controllers', ['ui.calendar', 'ui.bootstrap'])
+
+.controller('CalendarCtrl',
         function ($scope, $compile, $timeout, $uibModal, DataFactory, uiCalendarConfig,$route) {
             var date = new Date();
             var d = date.getDate();
             var m = date.getMonth();
             var y = date.getFullYear();
 
-            $scope.changeTo = 'Hungarian';
+            $scope.changeTo = 'Polish';
             /* event source that pulls from google.com */
             $scope.eventSource = {
                 url: "http://www.google.com/calendar/feeds/usa__en%40holiday.calendar.google.com/public/basic",
@@ -303,8 +304,7 @@ calendOrganize.controller('CalendarCtrl',
                     }
                 });
             }
-        });
-angular.module('starter.controllers', [])
+        })
 
 .controller('AppCtrl', function ($scope, $state, $ionicPopup, AuthService, AUTH_EVENTS) {
     $scope.username = AuthService.username();
@@ -327,6 +327,11 @@ angular.module('starter.controllers', [])
 
     $scope.setUserDetails = function (data) {
         $scope.user = data;
+    };
+
+    $scope.logout = function () {
+        AuthService.logout();
+        $state.go('login');
     };
 })
 
@@ -362,8 +367,5 @@ angular.module('starter.controllers', [])
 })
 
 .controller('DashCtrl', function ($scope, $state, $http, $ionicPopup, AuthService) {
-    $scope.logout = function () {
-        AuthService.logout();
-        $state.go('login');
-    };
+
 });
