@@ -1,0 +1,17 @@
+﻿<ion-view view-title="Dashboard" name="dashboard-view">
+    <ion-nav-buttons side="right">
+        <button class="button icon-left ion-log-out button-stable" ng-click="logout()">Logout</button>
+    </ion-nav-buttons>
+
+    <ion-content class="padding">
+        <div class="row">
+            <div class="col text-center">
+                <ion-item class="item-avatar">
+                    <img ng-src="{{user.imageUrl}}">
+                    <p>Welcome,</p>
+                    <h2>{{user.username}}</h2>
+                </ion-item>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>
