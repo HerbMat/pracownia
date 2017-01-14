@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 
 
-angular.module('starter', ['calendarOrganize','ionic','ngRoute', 'dataservices','ui.router'])
+angular.module('starter', ['calendarOrganize', 'starter.controllers','starter.services','ionic','ngRoute', 'dataservices','ui.router'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -37,34 +37,59 @@ angular.module('starter', ['calendarOrganize','ionic','ngRoute', 'dataservices',
     // Set up the various states which the app can be in.
     // Each state's controller can be found in controllers.js
     $stateProvider
-	
+
 	.state('calendar', {
-		
+
 		url: '/calendar',
 		templateUrl: 'templates/calendar.html',
 		controller: 'CalendarCtrl'
 	})
-
     .state('login', {
-        
+
         url: '/login',
         templateUrl: 'templates/login.html',
         controller: 'LoginCtrl'
-    });
+    })
+    .state('main', {
+
+        url: '/',
+        templateUrl: 'templates/home.html',
+    })
+    .state('main.dash', {
+        url: 'main/dash',
+        views: {
+            'dash-tab': {
+                templateUrl: 'templates/dashboard.html',
+                controller: 'DashCtrl'
+            }
+        }
+    })
     $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
     // if none of the above states are matched, use this as the fallback
-    
+    $urlRouterProvider.otherwise(function ($injector, $location) {
+        var $state = $injector.get("$state");
+        $state.go("main.dash");
+    });
 
 })
 
+.run(function ($rootScope, $state, AuthService, AUTH_EVENTS) {
+    $rootScope.$on('$stateChangeStart', function (event, next, nextParams, fromState) {
 
+        if ('data' in next && 'authorizedRoles' in next.data) {
+            var authorizedRoles = next.data.authorizedRoles;
+            if (!AuthService.isAuthorized(authorizedRoles)) {
+                event.preventDefault();
+                $state.go($state.current, {}, { reload: true });
+                $rootScope.$broadcast(AUTH_EVENTS.notAuthorized);
+            }
+        }
 
-
-
-
-
-
-
-
-
-
+        if (!AuthService.isAuthenticated()) {
+            if (next.name !== 'login') {
+                event.preventDefault();
+                $state.go('login');
+            }
+        }
+    });
+})
