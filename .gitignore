@@ -4,3 +4,5 @@ merges
 node_modules
 platforms
 taco.json
+res
+.idea
