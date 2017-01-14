@@ -6,7 +6,11 @@
     <ion-content class="padding">
         <div class="row">
             <div class="col text-center">
-                <h3 class="title">Welcome {{username}}!</h3>
+                <ion-item class="item-avatar">
+                    <img ng-src="{{user.imageUrl}}">
+                    <p>Welcome,</p>
+                    <h2>{{user.username}}</h2>
+                </ion-item>
             </div>
         </div>
     </ion-content>

@@ -19,8 +19,8 @@
         });
     });
 
-    $scope.setCurrentUsername = function (name) {
-        $scope.username = name;
+    $scope.setUserDetails = function (data) {
+        $scope.user = data;
     };
 })
 
@@ -30,13 +30,28 @@
     $scope.login = function (data) {
         AuthService.login(data.username, data.password).then(function (authenticated) {
             $state.go('main.dash', {}, { reload: true });
-            $scope.setCurrentUsername(data.username);
+            $scope.setUserDetails({
+                username: data.username,
+                imageUrl: 'https://pbs.twimg.com/profile_images/735571268641001472/kM_lPhzP.jpg'
+            });
         }, function (err) {
-            var alertPopup = $ionicPopup.alert({
+            $ionicPopup.alert({
                 title: 'Login failed!',
                 template: 'Please check your credentials!'
             });
         });
+    };
+
+    $scope.loginGoogle = function () {
+        AuthService.loginGoogle().then(function (data) {
+            $scope.setUserDetails(data);
+            $state.go('main.dash', {}, { reload: true });
+        }, function (err) {
+            $ionicPopup.alert({
+                title: 'Login failed!',
+                template: err
+            });
+        })
     };
 })
 

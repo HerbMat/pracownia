@@ -4,8 +4,8 @@
     var LOCAL_TOKEN_KEY = 'yourTokenKey';
     var username = '';
     var isAuthenticated = false;
-    var role = '';
     var authToken;
+    var authGrant;
 
     function loadUserCredentials() {
         var token = window.localStorage.getItem(LOCAL_TOKEN_KEY);
@@ -19,6 +19,15 @@
         useCredentials(token);
     }
 
+    function storeGoogleUserCredentials(grant) {
+        authGrant = grant;
+        window.localStorage.setItem(LOCAL_TOKEN_KEY, grant.idToken);
+
+        username = grant.displayName;
+        isAuthenticated = true;
+        authToken = grant.idToken;
+    }
+
     function useCredentials(token) {
         username = token.split('.')[0];
         isAuthenticated = true;
@@ -30,6 +39,7 @@
 
     function destroyUserCredentials() {
         authToken = undefined;
+        authGrant = undefined;
         username = '';
         isAuthenticated = false;
         $http.defaults.headers.common['X-Auth-Token'] = undefined;
@@ -48,6 +58,25 @@
         });
     };
 
+    var loginGoogle = function() {
+        return $q(function (resolve, reject) {
+            window.plugins.googleplus.login(
+            {
+                'webClientId': '275882641505-h2jrsg9u0351a0userffkni3808ke92u.apps.googleusercontent.com'
+            },
+            function(grant) {
+                storeGoogleUserCredentials(grant);
+                resolve({
+                    username: grant.displayName,
+                    imageUrl: grant.imageUrl
+                });
+            },
+            function (msg) {
+                reject(msg);
+            });
+        });
+    };
+
     var logout = function () {
         destroyUserCredentials();
     };
@@ -56,6 +85,7 @@
 
     return {
         login: login,
+        loginGoogle: loginGoogle,
         logout: logout,
         isAuthenticated: function () { return isAuthenticated; },
         username: function () { return username; }
