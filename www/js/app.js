@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 
 
-angular.module('starter', ['calendarOrganize', 'starter.controllers','starter.services','ionic','ngRoute', 'dataservices','ui.router'])
+angular.module('starter', ['starter.controllers','starter.services','ionic','ngRoute', 'dataservices','ui.router'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -38,12 +38,6 @@ angular.module('starter', ['calendarOrganize', 'starter.controllers','starter.se
     // Each state's controller can be found in controllers.js
     $stateProvider
 
-	.state('calendar', {
-
-		url: '/calendar',
-		templateUrl: 'templates/calendar.html',
-		controller: 'CalendarCtrl'
-	})
     .state('login', {
 
         url: '/login',
@@ -54,6 +48,16 @@ angular.module('starter', ['calendarOrganize', 'starter.controllers','starter.se
 
         url: '/',
         templateUrl: 'templates/home.html',
+    })
+
+    .state('main.calendar', {
+        url: 'main/calendar',
+        views: {
+            'public-tab': {
+                templateUrl: 'templates/calendar.html',
+                controller: 'CalendarCtrl'
+            }
+        }
     })
     .state('main.dash', {
         url: 'main/dash',
