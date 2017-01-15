@@ -1,9 +1,9 @@
 'use strict';
 
-angular.module('dataservices', [])
-        .factory('DataFactory', ['$http', '$rootScope',
-            function ($http, $rootScope, HeaderProvider) {
-                var urlBase = 'localhost:8080';
+angular.module('dataservices', ['starter'])
+        .factory('DataFactory', ['$http', '$rootScope','SERVER',
+            function ($http, $rootScope, SERVER) {
+                var urlBase = SERVER;
                 var dataFactory = {};
                 dataFactory.getAllEvents = function () {
                     return $http.get(urlBase + '/event/getAll');
@@ -28,9 +28,9 @@ angular.module('dataservices', [])
                 return dataFactory;
             }]);
 
-angular.module('starter.services', ['base64'])
+﻿angular.module('starter.services', [])
 
-.service('AuthService', function ($q, $http, $base64, SERVER) {
+.service('AuthService', function ($q, $http) {
     var LOCAL_TOKEN_KEY = 'yourTokenKey';
     var username = '';
     var isAuthenticated = false;
@@ -44,13 +44,9 @@ angular.module('starter.services', ['base64'])
         }
     }
 
-    function storeUserCredentials(token, name) {
+    function storeUserCredentials(token) {
         window.localStorage.setItem(LOCAL_TOKEN_KEY, token);
-        username = name;
-        isAuthenticated = true;
-
-        // Set the token as header for your requests!
-        $http.defaults.headers.common['Authorization'] = 'Bearer ' +  window.localStorage.getItem(LOCAL_TOKEN_KEY);
+        useCredentials(token);
     }
 
     function storeGoogleUserCredentials(grant) {
@@ -64,6 +60,7 @@ angular.module('starter.services', ['base64'])
     }
 
     function useCredentials(token) {
+        username = token.split('.')[0];
         isAuthenticated = true;
         authToken = token;
 
@@ -81,21 +78,14 @@ angular.module('starter.services', ['base64'])
     }
 
     var login = function (name, pw) {
-        return $q(function (resolve, reject) { 
-            $http.post(SERVER + '/oauth/token?grant_type=client_credentials', {}, {
-                headers: {
-                    'Authorization': 'Basic ' + $base64.encode(name + ':' + pw)
-                }
-            }).then(function (response) {
-                alert()
-                storeUserCredentials(response.access_token, name);
-                resolve({
-                    username: name,
-                    imageUrl: 'https://pbs.twimg.com/profile_images/735571268641001472/kM_lPhzP.jpg'
-                });
-            }, function (err) {
-                reject(err);
-            });
+        return $q(function (resolve, reject) {
+            if (name == 'user' && pw == '1') {
+                // Make a request and receive your auth token from your server
+                storeUserCredentials(name + '.yourServerToken');
+                resolve('Login success.');
+            } else {
+                reject('Login Failed.');
+            }
         });
     };
 
@@ -147,4 +137,4 @@ angular.module('starter.services', ['base64'])
  
 .config(function ($httpProvider) {
     $httpProvider.interceptors.push('AuthInterceptor');
-});
+})
