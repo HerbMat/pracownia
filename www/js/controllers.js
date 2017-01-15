@@ -164,7 +164,6 @@ var calendOrganize = angular.module('starter.controllers', ['ui.calendar', 'ui.b
 
                     $scope.writeFile = function () {
                         var toSave = JSON.stringify($scope.synchronizationArray, null, '\t');
-                        console.log(toSave);
                         var encoded = CryptoJS.AES.encrypt(toSave, CryptoJS.enc.Base64.parse("2b7e151628aed2a6abf7158809cf4f3c"), { iv: CryptoJS.enc.Base64.parse("3ad77bb40d7a3660a89ecaf32466ef97") });
                         window.localStorage.setItem('edve', encoded);
                     }
@@ -178,7 +177,6 @@ var calendOrganize = angular.module('starter.controllers', ['ui.calendar', 'ui.b
                                 ciphertext: CryptoJS.enc.Base64.parse(stored.toString((CryptoJS.enc.Base64)))
                             });
                             var jsonString = CryptoJS.AES.decrypt(stored, CryptoJS.enc.Base64.parse("2b7e151628aed2a6abf7158809cf4f3c"), { iv: CryptoJS.enc.Base64.parse("3ad77bb40d7a3660a89ecaf32466ef97") }).toString(CryptoJS.enc.Utf8);
-                            console.log(jsonString);
                             var jsData = JSON.parse(jsonString);
                             if (synchronizationBool) {
                                 $scope.synchronizationArray = jsData;
