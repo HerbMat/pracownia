@@ -28,9 +28,9 @@ angular.module('dataservices', [])
                 return dataFactory;
             }]);
 
-﻿angular.module('starter.services', [])
+angular.module('starter.services', ['base64'])
 
-.service('AuthService', function ($q, $http) {
+.service('AuthService', function ($q, $http, $base64, SERVER) {
     var LOCAL_TOKEN_KEY = 'yourTokenKey';
     var username = '';
     var isAuthenticated = false;
@@ -44,9 +44,13 @@ angular.module('dataservices', [])
         }
     }
 
-    function storeUserCredentials(token) {
+    function storeUserCredentials(token, name) {
         window.localStorage.setItem(LOCAL_TOKEN_KEY, token);
-        useCredentials(token);
+        username = name;
+        isAuthenticated = true;
+
+        // Set the token as header for your requests!
+        $http.defaults.headers.common['Authorization'] = 'Bearer ' +  window.localStorage.getItem(LOCAL_TOKEN_KEY);
     }
 
     function storeGoogleUserCredentials(grant) {
@@ -60,7 +64,6 @@ angular.module('dataservices', [])
     }
 
     function useCredentials(token) {
-        username = token.split('.')[0];
         isAuthenticated = true;
         authToken = token;
 
@@ -78,14 +81,21 @@ angular.module('dataservices', [])
     }
 
     var login = function (name, pw) {
-        return $q(function (resolve, reject) {
-            if (name == 'user' && pw == '1') {
-                // Make a request and receive your auth token from your server
-                storeUserCredentials(name + '.yourServerToken');
-                resolve('Login success.');
-            } else {
-                reject('Login Failed.');
-            }
+        return $q(function (resolve, reject) { 
+            $http.post(SERVER + '/oauth/token?grant_type=client_credentials', {}, {
+                headers: {
+                    'Authorization': 'Basic ' + $base64.encode(name + ':' + pw)
+                }
+            }).then(function (response) {
+                alert()
+                storeUserCredentials(response.access_token, name);
+                resolve({
+                    username: name,
+                    imageUrl: 'https://pbs.twimg.com/profile_images/735571268641001472/kM_lPhzP.jpg'
+                });
+            }, function (err) {
+                reject(err);
+            });
         });
     };
 
@@ -137,4 +147,4 @@ angular.module('dataservices', [])
  
 .config(function ($httpProvider) {
     $httpProvider.interceptors.push('AuthInterceptor');
-})
+});
