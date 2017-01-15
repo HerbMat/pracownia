@@ -6,7 +6,7 @@ var calendOrganize = angular.module('starter.controllers', ['ui.calendar', 'ui.b
                     var d = date.getDate();
                     var m = date.getMonth();
                     var y = date.getFullYear();
-
+                    var toSave = JSON.stringify($scope.synchronizationArray, null, '\t');
                     $scope.changeTo = 'Polish';
                     /* event source that pulls from google.com */
                     $scope.eventSource = {
@@ -43,15 +43,6 @@ var calendOrganize = angular.module('starter.controllers', ['ui.calendar', 'ui.b
 
                     /* event source that contains custom events on the scope */
                     $scope.getAllEvents();
-//            $scope.events = [
-//                {id: 10, title: 'All Day Event', start: new Date(y, m, 1)},
-//                {id: 1, title: 'Long Event', start: new Date(y, m, d - 5), end: new Date(y, m, d - 2)},
-//                {id: 999, title: 'Repeating Event', start: new Date(y, m, d - 3, 16, 0), allDay: false},
-//                {id: 999, title: 'Repeating Event', start: new Date(y, m, d + 4, 16, 0), allDay: false},
-//                {id: 2, title: 'Birthday Party', start: new Date(y, m, d + 1, 19, 0), end: new Date(y, m, d + 1, 22, 30), allDay: false},
-//                {id: 4, title: 'Click for Google', start: new Date(y, m, 28), end: new Date(y, m, 29), url: 'http://google.com/'}
-//            ];
-                    /* event source that calls a function on every view switch */
                     $scope.eventsF = function (start, end, timezone, callback) {
                         var s = new Date(start).getTime() / 1000;
                         var e = new Date(end).getTime() / 1000;
@@ -171,96 +162,32 @@ var calendOrganize = angular.module('starter.controllers', ['ui.calendar', 'ui.b
                         }
                     };
 
-                    $scope.createFile = function () {
-                        var type = window.TEMPORARY;
-                        var size = 5 * 1024 * 1024;
-                        window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
-                        window.requestFileSystem(type, size, successCallback, errorCallback)
-
-                        function successCallback(fs) {
-                            fs.root.getFile('localStoragePP.txt', {create: true, exclusive: true}, function (fileEntry) {
-                                console.log('File creation successfull!')
-                            }, errorCallback);
-                        }
-                        function errorCallback(error) {
-                            console.log("ERROR create: " + error.code)
-                        }
-                    }
-
-
                     $scope.writeFile = function () {
-                        var safe = cordova.plugins.disusered.safe;
-                        var key = 'someKey';
-                        $scope.removeFile();
-                        setTimeout(function () {
-                            $scope.createFile();
-                        }, 2000);
-                        setTimeout(function () {
-
-                            var type = window.TEMPORARY;
-                            var size = 5 * 1024 * 1024;
-                            window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
-                            window.requestFileSystem(type, size, successCallback, errorCallback)
-
-                            function successCallback(fs) {
-                                fs.root.getFile('localStoragePP.txt', { create: true }, function (fileEntry) {
-                                    fileEntry.createWriter(function (fileWriter) {
-                                        fileWriter.onwriteend = function (e) {
-                                            console.log('Write completed.');
-                                        };
-                                        fileWriter.onerror = function (e) {
-                                            console.log('Write failed: ' + e.toString());
-                                        };
-                                        var toSave = JSON.stringify($scope.synchronizationArray, null, '\t');
-                                        //JSON.stringify($scope.events);
-                                        //console.dir(toSave)
-                                        var blob = new Blob([toSave], { type: 'text/plain' });
-                                        fileWriter.write(blob);
-                                    }, errorCallback);
-                                }, errorCallback);
-                                safe.encrypt('localStoragePP.txt', key, function (encryptedFile) {
-                                    console.log('Encrypted file: ' + encryptedFile);
-                                }, error);
-                                function error() {
-                                    console.log('Error with cryptographic operation');
-                                }
-                            };
-                            function errorCallback(error) {
-                                console.log("ERROR write: " + error.code)
-                            }
-                        }, 4000);
+                        var toSave = JSON.stringify($scope.synchronizationArray, null, '\t');
+                        console.log(toSave);
+                        var encoded = CryptoJS.AES.encrypt(toSave, CryptoJS.enc.Base64.parse("2b7e151628aed2a6abf7158809cf4f3c"), { iv: CryptoJS.enc.Base64.parse("3ad77bb40d7a3660a89ecaf32466ef97") });
+                        window.localStorage.setItem('edve', encoded);
                     }
 
 
                     $scope.synchronizationArray = [];
                     $scope.readFile = function (synchronizationBool) {
-                        var type = window.TEMPORARY;
-                        var size = 5 * 1024 * 1024;
-                        window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
-                        window.requestFileSystem(type, size, successCallback, errorCallback)
-
-                        function successCallback(fs) {
-                            fs.root.getFile('localStoragePP.txt', {}, function (fileEntry) {
-                                fileEntry.file(function (file) {
-                                    var reader = new FileReader();
-                                    reader.onloadend = function (e) {
-                                        console.log("Successful file read: " + this.result);
-                                        var jsData = JSON.parse(this.result);
-                                        console.dir(jsData);
-                                        if (synchronizationBool) {
-                                            $scope.synchronizationArray = jsData;
-                                        } else {
-                                            $scope.synchronizationArray = jsData;
-                                            $scope.getAllEventsFromFile(jsData);
-                                        }
-                                    };
-                                    reader.readAsText(file);
-                                }, errorCallback);
-                            }, errorCallback);
+                        var stored = window.localStorage.getItem('edve');
+                        if (typeof stored !== 'undefined' && stored) {
+                            var cipherParams = CryptoJS.lib.CipherParams.create({
+                                ciphertext: CryptoJS.enc.Base64.parse(stored.toString((CryptoJS.enc.Base64)))
+                            });
+                            var jsonString = CryptoJS.AES.decrypt(stored, CryptoJS.enc.Base64.parse("2b7e151628aed2a6abf7158809cf4f3c"), { iv: CryptoJS.enc.Base64.parse("3ad77bb40d7a3660a89ecaf32466ef97") }).toString(CryptoJS.enc.Utf8);
+                            console.log(jsonString);
+                            var jsData = JSON.parse(jsonString);
+                            if (synchronizationBool) {
+                                $scope.synchronizationArray = jsData;
+                            } else {
+                                $scope.synchronizationArray = jsData;
+                                $scope.getAllEventsFromFile(jsData);
+                            }
                         }
-                        function errorCallback(error) {
-                            console.log("ERROR Read: " + error.code)
-                        }
+  
                     }
 
                     $scope.getAllEventsFromFile = function (jsData) {
@@ -280,32 +207,6 @@ var calendOrganize = angular.module('starter.controllers', ['ui.calendar', 'ui.b
                             }
                         });
                     }
-
-                    $scope.removeFile = function () {
-                        var type = window.TEMPORARY;
-                        var size = 5 * 1024 * 1024;
-                        window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
-                        window.requestFileSystem(type, size, successCallback, errorCallback)
-
-                        function successCallback(fs) {
-                            fs.root.getFile('localStoragePP.txt', {create: false}, function (fileEntry) {
-
-                                fileEntry.remove(function () {
-                                    console.log('File removed.');
-                                }, errorCallback);
-
-                            }, errorCallback);
-                        }
-                        function errorCallback(error) {
-                            console.log("ERROR: " + error.code)
-                        }
-                    }
-
-//$scope.removeFile();
-//$scope.createFile();
-//$scope.writeFile();
-//$scope.readFile(false);
-
 
                     $scope.addEventModal = function (event, events, synchronizationArray) {
                         $uibModal.open({
