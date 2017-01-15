@@ -341,10 +341,7 @@ var calendOrganize = angular.module('starter.controllers', ['ui.calendar', 'ui.b
     $scope.login = function (data) {
         AuthService.login(data.username, data.password).then(function (authenticated) {
             $state.go('main.dash', {}, { reload: true });
-            $scope.setUserDetails({
-                username: data.username,
-                imageUrl: 'https://pbs.twimg.com/profile_images/735571268641001472/kM_lPhzP.jpg'
-            });
+            $scope.setUserDetails(authenticated);
         }, function (err) {
             $ionicPopup.alert({
                 title: 'Login failed!',
