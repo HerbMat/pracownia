@@ -16,13 +16,17 @@ angular.module('dataservices', ['starter'])
                 dataFactory.addEvent = function (event) {
                     return $http.post(urlBase + '/event/add', event);
                 };
-                
+
                 dataFactory.editEvent = function (event) {
                     return $http.post(urlBase + '/event/edit', event);
                 };
 
                 dataFactory.deleteEvent = function (eventId) {
                     return $http.get(urlBase + '/event/delete?eventId=' + eventId);
+                };
+
+                dataFactory.synchronization = function (events) {
+                    return $http.post(urlBase + '/event/synchronization', events);
                 };
 
                 return dataFactory;
@@ -37,12 +41,12 @@ angular.module('starter.services', ['base64'])
     var authToken;
     var authGrant;
 
-    function loadUserCredentials() {
-        var token = window.localStorage.getItem(LOCAL_TOKEN_KEY);
-        if (token) {
-            useCredentials(token);
-        }
-    }
+            function loadUserCredentials() {
+                var token = window.localStorage.getItem(LOCAL_TOKEN_KEY);
+                if (token) {
+                    useCredentials(token);
+                }
+            }
 
     function storeUserCredentials(token, name) {
         window.localStorage.setItem(LOCAL_TOKEN_KEY, token);
@@ -55,9 +59,9 @@ angular.module('starter.services', ['base64'])
         $http.defaults.headers.common['Authorization'] = 'Bearer ' +  window.localStorage.getItem(LOCAL_TOKEN_KEY);
     }
 
-    function storeGoogleUserCredentials(grant) {
-        authGrant = grant;
-        window.localStorage.setItem(LOCAL_TOKEN_KEY, grant.idToken);
+            function storeGoogleUserCredentials(grant) {
+                authGrant = grant;
+                window.localStorage.setItem(LOCAL_TOKEN_KEY, grant.idToken);
 
         username = grant.displayName;
         isAuthenticated = true;
@@ -65,10 +69,10 @@ angular.module('starter.services', ['base64'])
         $http.defaults.headers.common['Authorization'] = 'Bearer ' + window.localStorage.getItem(LOCAL_TOKEN_KEY);
     }
 
-    function useCredentials(token) {
-        username = token.split('.')[0];
-        isAuthenticated = true;
-        authToken = token;
+            function useCredentials(token) {
+                username = token.split('.')[0];
+                isAuthenticated = true;
+                authToken = token;
 
         // Set the token as header for your requests!
         $http.defaults.headers.common['Authorization'] = 'Bearer ' +  window.localStorage.getItem(LOCAL_TOKEN_KEY);
@@ -108,39 +112,43 @@ angular.module('starter.services', ['base64'])
         });
     };
 
-    var loginGoogle = function() {
-        return $q(function (resolve, reject) {
-            window.plugins.googleplus.login(
-            {
-                'webClientId': '275882641505-h2jrsg9u0351a0userffkni3808ke92u.apps.googleusercontent.com'
-            },
-            function(grant) {
-                storeGoogleUserCredentials(grant);
-                resolve({
-                    username: grant.displayName,
-                    imageUrl: grant.imageUrl
+            var loginGoogle = function () {
+                return $q(function (resolve, reject) {
+                    window.plugins.googleplus.login(
+                            {
+                                'webClientId': '275882641505-h2jrsg9u0351a0userffkni3808ke92u.apps.googleusercontent.com'
+                            },
+                            function (grant) {
+                                storeGoogleUserCredentials(grant);
+                                resolve({
+                                    username: grant.displayName,
+                                    imageUrl: grant.imageUrl
+                                });
+                            },
+                            function (msg) {
+                                reject(msg);
+                            });
                 });
-            },
-            function (msg) {
-                reject(msg);
-            });
-        });
-    };
+            };
 
-    var logout = function () {
-        destroyUserCredentials();
-    };
+            var logout = function () {
+                destroyUserCredentials();
+            };
 
-    loadUserCredentials();
+            loadUserCredentials();
 
-    return {
-        login: login,
-        loginGoogle: loginGoogle,
-        logout: logout,
-        isAuthenticated: function () { return isAuthenticated; },
-        username: function () { return username; }
-    };
-})
+            return {
+                login: login,
+                loginGoogle: loginGoogle,
+                logout: logout,
+                isAuthenticated: function () {
+                    return isAuthenticated;
+                },
+                username: function () {
+                    return username;
+                }
+            };
+        })
 
 .factory('AuthInterceptor', function ($rootScope, $q, AUTH_EVENTS) {
     return {
