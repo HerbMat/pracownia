@@ -3,7 +3,6 @@
 angular.module('dataservices', ['starter'])
         .factory('DataFactory', ['$http', '$rootScope','SERVER',
             function ($http, $rootScope, HeaderProvider, SERVER) {
-                console.log(SERVER);
                 var urlBase = SERVER;
                 var dataFactory = {};
                 dataFactory.getAllEvents = function () {
@@ -47,7 +46,6 @@ angular.module('dataservices', ['starter'])
 
     function storeUserCredentials(token) {
         window.localStorage.setItem(LOCAL_TOKEN_KEY, token);
-        console.log(window.localStorage.getItem(LOCAL_TOKEN_KEY));
         useCredentials(token);
     }
 
