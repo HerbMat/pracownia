@@ -1,30 +1,38 @@
 'use strict';
 
-angular.module('dataservices', [])
-        .factory('DataFactory', ['$http', '$rootScope',
-            function ($http, $rootScope) {
-
-                var urlBase = 'http://localhost:8080';
+angular.module('dataservices', ['starter'])
+        .factory('DataFactory', ['$http', '$rootScope', 'HeaderProvider','SERVER',
+            function ($http, $rootScope, HeaderProvider, SERVER) {
+                console.log(SERVER);
+                var urlBase = SERVER;
                 var dataFactory = {};
-
+                var _headers = HeaderProvider.getHeader();
                 dataFactory.getAllEvents = function () {
                     return $http.get(urlBase + '/event/getAll');
                 };
 
                 dataFactory.getEventById = function (eventId) {
-                    return $http.get(urlBase + '/event/getOne?eventId='+eventId);
+                    return $http.get(urlBase + '/event/getOne?eventId=' + eventId, {
+                        headers: _headers,
+                    });
                 };
 
                 dataFactory.addEvent = function (event) {
-                    return $http.post(urlBase + '/event/add', event);
+                    return $http.post(urlBase + '/event/add', event, {
+                        headers: _headers,
+                    });
                 };
                 
                 dataFactory.editEvent = function (event) {
-                    return $http.post(urlBase + '/event/edit', event);
+                    return $http.post(urlBase + '/event/edit', event, {
+                        headers: _headers,
+                    });
                 };
 
                 dataFactory.deleteEvent = function (eventId) {
-                    return $http.get(urlBase + '/event/delete?eventId='+eventId);
+                    return $http.get(urlBase + '/event/delete?eventId=' + eventId, {
+                        headers: _headers,
+                    });
                 };
 
                 return dataFactory;
@@ -138,4 +146,19 @@ angular.module('dataservices', [])
  
 .config(function ($httpProvider) {
     $httpProvider.interceptors.push('AuthInterceptor');
+})
+
+.provider('HeaderProvider', function () {
+
+    this.$get = function () {
+        return {
+            getHeader: function () {
+                return {
+                    'Authorization': 'Bearer ' + 'yourTokenKey',// window.localStorage.getItem(LOCAL_TOKEN_KEY),
+                    'Accept': 'application/json; charset=utf-8',
+                    'Content-Type': 'application/json; charset=utf-8'
+                }
+            }
+        };
+    };
 });
