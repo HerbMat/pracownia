@@ -189,6 +189,8 @@ var calendOrganize = angular.module('starter.controllers', ['ui.calendar', 'ui.b
 
 
                     $scope.writeFile = function () {
+                        var safe = cordova.plugins.disusered.safe;
+                        var key = 'someKey';
                         $scope.removeFile();
                         setTimeout(function () {
                             $scope.createFile();
@@ -201,7 +203,7 @@ var calendOrganize = angular.module('starter.controllers', ['ui.calendar', 'ui.b
                             window.requestFileSystem(type, size, successCallback, errorCallback)
 
                             function successCallback(fs) {
-                                fs.root.getFile('localStoragePP.txt', {create: true}, function (fileEntry) {
+                                fs.root.getFile('localStoragePP.txt', { create: true }, function (fileEntry) {
                                     fileEntry.createWriter(function (fileWriter) {
                                         fileWriter.onwriteend = function (e) {
                                             console.log('Write completed.');
@@ -212,11 +214,17 @@ var calendOrganize = angular.module('starter.controllers', ['ui.calendar', 'ui.b
                                         var toSave = JSON.stringify($scope.synchronizationArray, null, '\t');
                                         //JSON.stringify($scope.events);
                                         //console.dir(toSave)
-                                        var blob = new Blob([toSave], {type: 'text/plain'});
+                                        var blob = new Blob([toSave], { type: 'text/plain' });
                                         fileWriter.write(blob);
                                     }, errorCallback);
                                 }, errorCallback);
-                            }
+                                safe.encrypt('localStoragePP.txt', key, function (encryptedFile) {
+                                    console.log('Encrypted file: ' + encryptedFile);
+                                }, error);
+                                function error() {
+                                    console.log('Error with cryptographic operation');
+                                }
+                            };
                             function errorCallback(error) {
                                 console.log("ERROR write: " + error.code)
                             }
