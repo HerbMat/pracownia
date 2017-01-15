@@ -1,12 +1,13 @@
 var calendOrganize = angular.module('starter.controllers', ['ui.calendar', 'ui.bootstrap'])
 
         .controller('CalendarCtrl',
-                function ($scope, $compile, $timeout, $uibModal, DataFactory, uiCalendarConfig) {
+                function ($scope, $compile, $timeout, $uibModal, $interval, DataFactory, uiCalendarConfig) {
                     var date = new Date();
                     var d = date.getDate();
                     var m = date.getMonth();
                     var y = date.getFullYear();
                     var toSave = JSON.stringify($scope.synchronizationArray, null, '\t');
+
                     $scope.changeTo = 'Polish';
                     /* event source that pulls from google.com */
                     $scope.eventSource = {
@@ -185,7 +186,7 @@ var calendOrganize = angular.module('starter.controllers', ['ui.calendar', 'ui.b
                                 $scope.getAllEventsFromFile(jsData);
                             }
                         }
-  
+
                     }
 
                     $scope.getAllEventsFromFile = function (jsData) {
@@ -246,9 +247,12 @@ var calendOrganize = angular.module('starter.controllers', ['ui.calendar', 'ui.b
                                         writeFile();
                                         setTimeout(function () {
                                             readFile(false);
-                                        }, 6000);
+                                        }, 4000);
                                         $uibModalInstance.dismiss('cancel');
                                     });
+									///////////////////////////////////////////////////////////////////////////////////
+									setTimeout(synchronizationFun, 5000);
+									//synchronizationFun();
                                 };
                                 $scope.cancel = function () {
                                     $uibModalInstance.dismiss('cancel');
@@ -272,6 +276,7 @@ var calendOrganize = angular.module('starter.controllers', ['ui.calendar', 'ui.b
                                 }
                             }
                         });
+
                     }
 
                     $scope.editEventModal = function (event, events, synchronizationArray) {
@@ -326,9 +331,10 @@ var calendOrganize = angular.module('starter.controllers', ['ui.calendar', 'ui.b
                                         writeFile();
                                         setTimeout(function () {
                                             readFile(false);
-                                        }, 6000);
+                                        }, 4000);
                                         $uibModalInstance.dismiss('cancel');
                                     });
+									setTimeout(synchronizationFun, 5000);
                                 };
 
                                 $scope.delete = function () {
@@ -347,9 +353,10 @@ var calendOrganize = angular.module('starter.controllers', ['ui.calendar', 'ui.b
                                         writeFile();
                                         setTimeout(function () {
                                             readFile(false);
-                                        }, 6000);
+                                        }, 4000);
                                         $uibModalInstance.dismiss('cancel');
                                     });
+									setTimeout(synchronizationFun, 5000);
                                 };
 
                                 $scope.cancel = function () {
@@ -379,7 +386,8 @@ var calendOrganize = angular.module('starter.controllers', ['ui.calendar', 'ui.b
                         });
                     }
 
-                    $scope.synchronization = function () {
+                    $scope.synchronization = synchronizationFun;
+					function synchronizationFun() {
                         console.log('synchronization');
                         $scope.readFile(true);
                         console.dir($scope.synchronizationArray);
