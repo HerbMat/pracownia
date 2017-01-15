@@ -1,1 +1,31 @@
 ﻿/* Empty. Add your own CSS if you like */
+.modal{
+	visibility:hidden;
+}
+
+.modal-content{
+	position:absolute;
+	visibility:visible;
+	margin-left:50%;
+}
+
+
+.modal-label{
+	font-weight:bold;
+}
+
+.event-date{
+	margin-top:10%;
+	margin-left:30%;
+}
+
+.input-event{
+	margin-right:0%;
+	margin-left: 20%;
+}
+.fc-time{
+	visibility:hidden;
+}
+.fc-title{
+	margin-left:-8%;
+}
