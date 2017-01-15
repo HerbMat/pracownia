@@ -49,7 +49,14 @@ angular.module('starter.services', ['base64'])
         useCredentials(token);
         username = name;
         isAuthenticated = true;
+<<<<<<< HEAD
         $http.defaults.headers.common['Authorization'] = 'Bearer ' + window.localStorage.getItem(LOCAL_TOKEN_KEY);
+=======
+        authToken = token;
+
+        // Set the token as header for your requests!
+        $http.defaults.headers.common['Authorization'] = 'Bearer ' +  window.localStorage.getItem(LOCAL_TOKEN_KEY);
+>>>>>>> Working local OAuth2
     }
 
     function storeGoogleUserCredentials(grant) {
@@ -94,8 +101,7 @@ angular.module('starter.services', ['base64'])
                     'Authorization': 'Basic ' + $base64.encode(name + ':' + pw)
                 }
             }).then(function (response) {
-                alert()
-                storeUserCredentials(response.access_token, name);
+                storeUserCredentials(response.data.access_token, name);
                 resolve({
                     username: name,
                     imageUrl: 'https://pbs.twimg.com/profile_images/735571268641001472/kM_lPhzP.jpg'
