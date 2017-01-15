@@ -20,10 +20,9 @@
                                         <div class="btn-toolbar">
                                             <!-- Calendar modal -->
                                             <div class="btn-group">
-                                                <button class="btn btn-success" ng-click="changeView('agendaDay', 'myCalendar1')">AgendaDay</button>
-                                                <button class="btn btn-success" ng-click="changeView('agendaWeek', 'myCalendar1')">AgendaWeek</button>
-                                                <button class="btn btn-success" ng-click="changeView('month', 'myCalendar1')">Month</button>
-                                                <button class="btn btn-success" ng-click="synchronization()">Synchronization</button>
+                                                <button class="btn btn-success btn-xs" ng-click="changeView('agendaDay', 'myCalendar1')">AgendaDay</button>
+                                                <button class="btn btn-success btn-xs" ng-click="changeView('agendaWeek', 'myCalendar1')">AgendaWeek</button>
+                                                <button class="btn btn-success btn-xs" ng-click="changeView('month', 'myCalendar1')">Month</button>
                                             </div>
                                         </div>
                                         <div class="calendar" ng-model="eventSources" calendar="myCalendar1" ui-calendar="uiConfig.calendar"></div>
