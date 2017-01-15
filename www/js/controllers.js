@@ -17,7 +17,7 @@ var calendOrganize = angular.module('starter.controllers', ['ui.calendar', 'ui.b
                         className: 'gcal-event', // an option!
                         currentTimezone: 'America/Chicago' // an option!
                     };
-                    
+
                     $scope.synchronizationArray = [];
                     $scope.events = [];
                     $scope.getAllEvents = function () {
@@ -32,7 +32,7 @@ var calendOrganize = angular.module('starter.controllers', ['ui.calendar', 'ui.b
                                             title: value.title,
                                             start: value.startDate,
                                             end: value.endDate
-                                        });                                       
+                                        });
                                         $scope.synchronizationArray.push(value);
                                     });
                                     console.dir($scope.events);
@@ -528,20 +528,17 @@ var calendOrganize = angular.module('starter.controllers', ['ui.calendar', 'ui.b
         .controller('LoginCtrl', function ($scope, $state, $ionicPopup, AuthService) {
             $scope.data = {};
 
-            $scope.login = function (data) {
-                AuthService.login(data.username, data.password).then(function (authenticated) {
-                    $state.go('main.dash', {}, {reload: true});
-                    $scope.setUserDetails({
-                        username: data.username,
-                        imageUrl: 'https://pbs.twimg.com/profile_images/735571268641001472/kM_lPhzP.jpg'
-                    });
-                }, function (err) {
-                    $ionicPopup.alert({
-                        title: 'Login failed!',
-                        template: 'Please check your credentials!'
-                    });
-                });
-            };
+    $scope.login = function (data) {
+        AuthService.login(data.username, data.password).then(function (authenticated) {
+            $state.go('main.dash', {}, { reload: true });
+            $scope.setUserDetails(authenticated);
+        }, function (err) {
+            $ionicPopup.alert({
+                title: 'Login failed!',
+                template: 'Please check your credentials!'
+            });
+        });
+    };
 
             $scope.loginGoogle = function () {
                 AuthService.loginGoogle().then(function (data) {
