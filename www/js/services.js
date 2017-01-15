@@ -49,14 +49,10 @@ angular.module('starter.services', ['base64'])
         useCredentials(token);
         username = name;
         isAuthenticated = true;
-<<<<<<< HEAD
-        $http.defaults.headers.common['Authorization'] = 'Bearer ' + window.localStorage.getItem(LOCAL_TOKEN_KEY);
-=======
         authToken = token;
 
         // Set the token as header for your requests!
         $http.defaults.headers.common['Authorization'] = 'Bearer ' +  window.localStorage.getItem(LOCAL_TOKEN_KEY);
->>>>>>> Working local OAuth2
     }
 
     function storeGoogleUserCredentials(grant) {
