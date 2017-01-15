@@ -1,9 +1,9 @@
 'use strict';
 
-angular.module('dataservices', ['starter'])
-        .factory('DataFactory', ['$http', '$rootScope','SERVER',
-            function ($http, $rootScope, HeaderProvider, SERVER) {
-                var urlBase = SERVER;
+angular.module('dataservices', [])
+        .factory('DataFactory', ['$http', '$rootScope',
+            function ($http, $rootScope, HeaderProvider) {
+                var urlBase = 'localhost:8080';
                 var dataFactory = {};
                 dataFactory.getAllEvents = function () {
                     return $http.get(urlBase + '/event/getAll');
