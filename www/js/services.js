@@ -1,38 +1,29 @@
 'use strict';
 
 angular.module('dataservices', ['starter'])
-        .factory('DataFactory', ['$http', '$rootScope', 'HeaderProvider','SERVER',
+        .factory('DataFactory', ['$http', '$rootScope','SERVER',
             function ($http, $rootScope, HeaderProvider, SERVER) {
                 console.log(SERVER);
                 var urlBase = SERVER;
                 var dataFactory = {};
-                var _headers = HeaderProvider.getHeader();
                 dataFactory.getAllEvents = function () {
                     return $http.get(urlBase + '/event/getAll');
                 };
 
                 dataFactory.getEventById = function (eventId) {
-                    return $http.get(urlBase + '/event/getOne?eventId=' + eventId, {
-                        headers: _headers,
-                    });
+                    return $http.get(urlBase + '/event/getOne?eventId=');
                 };
 
                 dataFactory.addEvent = function (event) {
-                    return $http.post(urlBase + '/event/add', event, {
-                        headers: _headers,
-                    });
+                    return $http.post(urlBase + '/event/add', event);
                 };
                 
                 dataFactory.editEvent = function (event) {
-                    return $http.post(urlBase + '/event/edit', event, {
-                        headers: _headers,
-                    });
+                    return $http.post(urlBase + '/event/edit', event);
                 };
 
                 dataFactory.deleteEvent = function (eventId) {
-                    return $http.get(urlBase + '/event/delete?eventId=' + eventId, {
-                        headers: _headers,
-                    });
+                    return $http.get(urlBase + '/event/delete?eventId=' + eventId);
                 };
 
                 return dataFactory;
@@ -56,6 +47,7 @@ angular.module('dataservices', ['starter'])
 
     function storeUserCredentials(token) {
         window.localStorage.setItem(LOCAL_TOKEN_KEY, token);
+        console.log(window.localStorage.getItem(LOCAL_TOKEN_KEY));
         useCredentials(token);
     }
 
@@ -66,6 +58,7 @@ angular.module('dataservices', ['starter'])
         username = grant.displayName;
         isAuthenticated = true;
         authToken = grant.idToken;
+        $http.defaults.headers.common['Authorization'] = 'Bearer ' + window.localStorage.getItem(LOCAL_TOKEN_KEY);
     }
 
     function useCredentials(token) {
@@ -74,7 +67,7 @@ angular.module('dataservices', ['starter'])
         authToken = token;
 
         // Set the token as header for your requests!
-        $http.defaults.headers.common['X-Auth-Token'] = token;
+        $http.defaults.headers.common['Authorization'] = 'Bearer ' +  window.localStorage.getItem(LOCAL_TOKEN_KEY);
     }
 
     function destroyUserCredentials() {
@@ -82,7 +75,7 @@ angular.module('dataservices', ['starter'])
         authGrant = undefined;
         username = '';
         isAuthenticated = false;
-        $http.defaults.headers.common['X-Auth-Token'] = undefined;
+        $http.defaults.headers.common['Authorization'] = undefined;
         window.localStorage.removeItem(LOCAL_TOKEN_KEY);
     }
 
@@ -147,18 +140,3 @@ angular.module('dataservices', ['starter'])
 .config(function ($httpProvider) {
     $httpProvider.interceptors.push('AuthInterceptor');
 })
-
-.provider('HeaderProvider', function () {
-
-    this.$get = function () {
-        return {
-            getHeader: function () {
-                return {
-                    'Authorization': 'Bearer ' + 'yourTokenKey',// window.localStorage.getItem(LOCAL_TOKEN_KEY),
-                    'Accept': 'application/json; charset=utf-8',
-                    'Content-Type': 'application/json; charset=utf-8'
-                }
-            }
-        };
-    };
-});
