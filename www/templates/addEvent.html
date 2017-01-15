@@ -3,10 +3,21 @@
         </div>
         <div class="modal-body">
            
-            <input ng-model="addEvent.title"  />
-            <input type="datetime-local" ng-model="addEvent.startDate"  />
-            <input type="datetime-local" ng-model="addEvent.endDate"  />
-           <input  ng-model="addEvent.location"  />
+            <span class="modal-label">Event: </span><input class="input-event" ng-model="addEvent.title"  />
+			<br><br>
+
+            <span class="modal-label">Location: </span><input class="input-event" ng-model="addEvent.location"  />
+			
+			<div class="event-date">
+				<span class="modal-label">Start date: </span><input type="datetime-local" ng-model="addEvent.startDate"  />
+				<br>
+				<span class="modal-label">End date: </span><input type="datetime-local" ng-model="addEvent.endDate"  />
+			</div>
+			
+			
+			
+			
+           
         </div>
         <div class="modal-footer">
             <button class="btn btn-primary" ng-click="add()">Add</button>
