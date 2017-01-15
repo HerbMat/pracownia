@@ -1,11 +1,14 @@
 var calendOrganize = angular.module('starter.controllers', ['ui.calendar', 'ui.bootstrap'])
 
         .controller('CalendarCtrl',
-                function ($scope, $compile, $timeout, $uibModal, DataFactory, uiCalendarConfig) {
+                function ($scope, $compile, $timeout, $uibModal, $interval, DataFactory, uiCalendarConfig) {
                     var date = new Date();
                     var d = date.getDate();
                     var m = date.getMonth();
                     var y = date.getFullYear();
+					setTimeout(synchronizationFun, 100);
+					//$interval(function(){ if }, 8000);
+					
 
                     $scope.changeTo = 'Polish';
                     /* event source that pulls from google.com */
@@ -220,7 +223,7 @@ var calendOrganize = angular.module('starter.controllers', ['ui.calendar', 'ui.b
                             function errorCallback(error) {
                                 console.log("ERROR write: " + error.code)
                             }
-                        }, 4000);
+                        }, 3000);
                     }
 
 
@@ -339,9 +342,12 @@ var calendOrganize = angular.module('starter.controllers', ['ui.calendar', 'ui.b
                                         writeFile();
                                         setTimeout(function () {
                                             readFile(false);
-                                        }, 6000);
+                                        }, 4000);
                                         $uibModalInstance.dismiss('cancel');
                                     });
+									///////////////////////////////////////////////////////////////////////////////////
+									setTimeout(synchronizationFun, 5000);
+									//synchronizationFun();
                                 };
                                 $scope.cancel = function () {
                                     $uibModalInstance.dismiss('cancel');
@@ -365,6 +371,7 @@ var calendOrganize = angular.module('starter.controllers', ['ui.calendar', 'ui.b
                                 }
                             }
                         });
+						
                     }
 
                     $scope.editEventModal = function (event, events, synchronizationArray) {
@@ -419,9 +426,10 @@ var calendOrganize = angular.module('starter.controllers', ['ui.calendar', 'ui.b
                                         writeFile();
                                         setTimeout(function () {
                                             readFile(false);
-                                        }, 6000);
+                                        }, 4000);
                                         $uibModalInstance.dismiss('cancel');
                                     });
+									setTimeout(synchronizationFun, 5000);
                                 };
 
                                 $scope.delete = function () {
@@ -440,9 +448,10 @@ var calendOrganize = angular.module('starter.controllers', ['ui.calendar', 'ui.b
                                         writeFile();
                                         setTimeout(function () {
                                             readFile(false);
-                                        }, 6000);
+                                        }, 4000);
                                         $uibModalInstance.dismiss('cancel');
                                     });
+									setTimeout(synchronizationFun, 5000);
                                 };
 
                                 $scope.cancel = function () {
@@ -472,7 +481,8 @@ var calendOrganize = angular.module('starter.controllers', ['ui.calendar', 'ui.b
                         });
                     }
 
-                    $scope.synchronization = function () {
+                    $scope.synchronization = synchronizationFun;
+					function synchronizationFun() {
                         console.log('synchronization');
                         $scope.readFile(true);
                         console.dir($scope.synchronizationArray);
