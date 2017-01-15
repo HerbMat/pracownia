@@ -10,7 +10,7 @@ angular.module('dataservices', ['starter'])
                 };
 
                 dataFactory.getEventById = function (eventId) {
-                    return $http.get(urlBase + '/event/getOne?eventId=');
+                    return $http.get(urlBase + '/event/getOne?eventId=' + eventId);
                 };
 
                 dataFactory.addEvent = function (event) {
@@ -28,9 +28,9 @@ angular.module('dataservices', ['starter'])
                 return dataFactory;
             }]);
 
-﻿angular.module('starter.services', [])
+angular.module('starter.services', ['base64'])
 
-.service('AuthService', function ($q, $http) {
+.service('AuthService', function ($q, $http, $base64, SERVER) {
     var LOCAL_TOKEN_KEY = 'yourTokenKey';
     var username = '';
     var isAuthenticated = false;
@@ -44,9 +44,12 @@ angular.module('dataservices', ['starter'])
         }
     }
 
-    function storeUserCredentials(token) {
+    function storeUserCredentials(token, name) {
         window.localStorage.setItem(LOCAL_TOKEN_KEY, token);
         useCredentials(token);
+        username = name;
+        isAuthenticated = true;
+        $http.defaults.headers.common['Authorization'] = 'Bearer ' + window.localStorage.getItem(LOCAL_TOKEN_KEY);
     }
 
     function storeGoogleUserCredentials(grant) {
@@ -78,14 +81,28 @@ angular.module('dataservices', ['starter'])
     }
 
     var login = function (name, pw) {
-        return $q(function (resolve, reject) {
-            if (name == 'user' && pw == '1') {
+        if (name == 'user' && pw == '1') {
+            return $q(function (resolve, reject) {
                 // Make a request and receive your auth token from your server
                 storeUserCredentials(name + '.yourServerToken');
                 resolve('Login success.');
-            } else {
-                reject('Login Failed.');
-            }
+            });
+        }
+        return $q(function (resolve, reject) {
+            $http.post(SERVER + '/oauth/token?grant_type=client_credentials', {}, {
+                headers: {
+                    'Authorization': 'Basic ' + $base64.encode(name + ':' + pw)
+                }
+            }).then(function (response) {
+                alert()
+                storeUserCredentials(response.access_token, name);
+                resolve({
+                    username: name,
+                    imageUrl: 'https://pbs.twimg.com/profile_images/735571268641001472/kM_lPhzP.jpg'
+                });
+            }, function (err) {
+                reject(err);
+            });
         });
     };
 
