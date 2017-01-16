@@ -52,6 +52,7 @@ angular.module('starter', ['starter.controllers','starter.services','ionic','ngR
 
     .state('main.calendar', {
         url: 'main/calendar',
+        cache: false, 
         views: {
             'public-tab': {
                 templateUrl: 'templates/calendar.html',
