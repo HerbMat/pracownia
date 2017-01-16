@@ -231,14 +231,7 @@ var calendOrganize = angular.module('starter.controllers', ['ui.calendar', 'ui.b
                                 $scope.add = function () {
                                     date.setTime(date.valueOf() - 60000 * date.getTimezoneOffset());
                                     dateEnd.setTime(dateEnd.valueOf() - 60000 * dateEnd.getTimezoneOffset());
-                                    $scope.addEventToSave = {
-                                        idEvent: "",
-                                        title: "",
-                                        startDate: date,
-                                        endDate: dateEnd,
-                                        location: "",
-                                    }
-                                    DataFactory.addEvent($scope.addEventToSave)
+                                    DataFactory.addEvent($scope.addEvent)
                                             .success(function (data, status, headers, config) {
                                                 getAllEvents();
                                                 $uibModalInstance.dismiss('cancel');
