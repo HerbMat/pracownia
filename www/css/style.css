@@ -6,7 +6,8 @@
 .modal-content{
 	position:absolute;
 	visibility:visible;
-	margin-left:50%;
+	margin-left:5%;
+	width:280px;
 }
 
 
