@@ -146,7 +146,7 @@ var calendOrganize = angular.module('starter.controllers', ['ui.calendar', 'ui.b
                         }
                     };
                     /* event sources array*/
-                    $scope.eventSources = [$scope.events, $scope.eventSource, $scope.eventsF];
+                    $scope.eventSources = [$scope.events, $scope.getAllEvents, $scope.eventsF];
                     $scope.eventSources2 = [$scope.calEventsExt, $scope.eventsF, $scope.events];
 
                     $scope.uiConfig = {
