@@ -243,9 +243,6 @@ var calendOrganize = angular.module('starter.controllers', ['ui.calendar', 'ui.b
                                         }, 4000);
                                         $uibModalInstance.dismiss('cancel');
                                     });
-									///////////////////////////////////////////////////////////////////////////////////
-									setTimeout(synchronizationFun, 5000);
-									//synchronizationFun();
                                 };
                                 $scope.cancel = function () {
                                     $uibModalInstance.dismiss('cancel');
@@ -317,17 +314,16 @@ var calendOrganize = angular.module('starter.controllers', ['ui.calendar', 'ui.b
                                     $scope.editEvent.startDate = date;
                                     $scope.editEvent.endDate = dateEnd;
                                     DataFactory.editEvent($scope.editEvent)
-                                            .success(function (data, status, headers, config) {
-                                                getAllEvents();
-                                                $uibModalInstance.dismiss('cancel');
-                                            }).error(function (data, status, headers, config) {
+                                    .success(function (data, status, headers, config) {
+                                        getAllEvents();
+                                        $uibModalInstance.dismiss('cancel');
+                                    }).error(function (data, status, headers, config) {
                                         writeFile();
                                         setTimeout(function () {
                                             readFile(false);
                                         }, 4000);
                                         $uibModalInstance.dismiss('cancel');
                                     });
-									setTimeout(synchronizationFun, 5000);
                                 };
 
                                 $scope.delete = function () {
@@ -349,7 +345,6 @@ var calendOrganize = angular.module('starter.controllers', ['ui.calendar', 'ui.b
                                         }, 4000);
                                         $uibModalInstance.dismiss('cancel');
                                     });
-									setTimeout(synchronizationFun, 5000);
                                 };
 
                                 $scope.cancel = function () {
